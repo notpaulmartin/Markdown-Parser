@@ -13,8 +13,10 @@ const (
 	H5Tag Tag = "h5"
 	H6Tag Tag = "h6"
 
-	BoldTag          Tag = "b"
-	ItalicsTag       Tag = "i"
+	BoldTag          Tag = "strong"
+	ItalicsTag       Tag = "em"
+	LinkTag			 Tag = "a"
+	PicTag			 Tag = "PIC" // TODO: use html tag
 	StrikethroughTag Tag = "strike"
 
 	CheckboxTrueTag  Tag = "checkboxTrue"  // Checked

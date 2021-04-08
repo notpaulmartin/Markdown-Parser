@@ -14,8 +14,13 @@ func main() {
 	//
 	//fmt.Println(text)
 
-	input := "# aa **# hello**"
+	input := "[aa **#]( hello**)"
 
+	// TODO: split by...
+	//  - "\n\n"
+	//  -
+
+	// parse lines
 	_, parsed := Rules.All.Apply(input)
 	var previousParsed []Parse.ParseTree
 
@@ -24,9 +29,14 @@ func main() {
 		previousParsed = make([]Parse.ParseTree, len(parsed))
 		copy(previousParsed, parsed)
 
-		// parse again
+		// parse again (only using formatters, as lines will already have been parsed)
 		parsed = Rules.RecursiveApply(parsed, &Rules.Formatters)
 	}
+
+	// TODO (??): implement post-processor
+	//  - to join codeblocks that have been split by intermediate "\n\n"
+
+	// TODO: implement compiler to HTML
 
 	fmt.Println(parsed)
 }

@@ -1,4 +1,4 @@
-package Rules
+package RuleParser
 
 import "mdParser/Parse"
 
