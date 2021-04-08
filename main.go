@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"mdParser/Parse"
 	"mdParser/Rules"
+	"reflect"
 )
 
 func main() {
@@ -12,7 +14,19 @@ func main() {
 	//
 	//fmt.Println(text)
 
-	success, h1 := Rules.UnorderedListItem.Apply("- aa ***hello*** **xy**z")
-	fmt.Println("success:", success)
-	fmt.Println("format:", h1)
+	input := "# aa **# hello**"
+
+	_, parsed := Rules.All.Apply(input)
+	var previousParsed []Parse.ParseTree
+
+	for !reflect.DeepEqual(parsed, previousParsed) {
+		// previousParsed = copy(parsed)
+		previousParsed = make([]Parse.ParseTree, len(parsed))
+		copy(previousParsed, parsed)
+
+		// parse again
+		parsed = Rules.RecursiveApply(parsed, &Rules.Formatters)
+	}
+
+	fmt.Println(parsed)
 }

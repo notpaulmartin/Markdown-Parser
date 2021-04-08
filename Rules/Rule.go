@@ -1,31 +1,14 @@
 package Rules
 
-import (
-	"mdParser/Parse"
-)
+import "mdParser/Parse"
 
-type applyFunc func(string) (bool, []Parse.Tag)
+type applyFunc func(string) (bool, []Parse.ParseTree)
 
 type Rule struct {
-	Apply applyFunc
+	ApplyFunc applyFunc
 }
 
-//func newRegexRule(tag string, regex string) Rule {
-//
-//	applyRegex :=
-//		func(input string) (bool, []Parse.Tag) {
-//			r, err := regexp.Compile(regex)
-//
-//			// Error
-//			if err != nil {return false, nil}
-//			// No match
-//			if !r.MatchString(input) {return false, nil}
-//
-//			captured := r.FindStringSubmatch(input)[1:]
-//
-//
-//
-//			return true, nil
-//		}
-//	return Rule{applyRegex}
-//}
+// Wrapper around ApplyFunc, to allow for interface matching
+func (r *Rule) Apply(x string) (bool, []Parse.ParseTree) {
+	return (*r).ApplyFunc(x)
+}

@@ -1,7 +1,7 @@
-package main
+package Rules
 
 import "mdParser/Parse"
 
 type Applyable interface {
-	apply() (bool, Parse.Tag)
+	Apply(string) (bool, []Parse.ParseTree)
 }
