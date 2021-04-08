@@ -2,56 +2,51 @@
 package Rules
 
 import (
-	"fmt"
 	"mdParser/Parse"
 	"mdParser/Parse/RuleParser"
 	"regexp"
 	"strings"
 )
 
+// Regex flags
+const (
+	ungreedy  = `(?Um)`
+	multiline = `(?m)`
+)
+
 
 // E.g. "# abc"  ->  "abc"
 func extractRegex(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
-		r, err := regexp.Compile(regex)
+		r, err := regexp.Compile(multiline + regex)
 		if err != nil || !r.MatchString(input) {
 			return false, nil
 		}
 
-		matches := r.FindStringSubmatch(input)
-		match := matches[len(matches)-1]
-
-		return true, []Parse.ParseTree{{
-			TagName:  tagName,
-			Children: Parse.RawChild(match),
-		}}
+		matches := r.FindAllStringSubmatch(input, -1)
+		matchNodes := matchesToNodes(tagName, matches, "")  // Compile matches into nodes
+		return true, matchNodes
 	}
 }
 
 // E.g. "- [ ] abc"  ->  Checkbox{ "abc", false }
 func extractRegexWContent(tagName Parse.Tag, regex string, content string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
-		r, err := regexp.Compile(regex)
+		r, err := regexp.Compile(multiline + regex)
 		if err != nil || !r.MatchString(input) {
 			return false, nil
 		}
 
-		matches := r.FindStringSubmatch(input)
-		match := matches[len(matches)-1]
-
-		return true, []Parse.ParseTree{{
-			TagName:  tagName,
-			Children: Parse.RawChild(match),
-			Content:  content,
-		}}
+		matches := r.FindAllStringSubmatch(input, -1)
+		matchNodes := matchesToNodes(tagName, matches, content)  // Compile matches into nodes
+		return true, matchNodes
 	}
 }
 
 // E.g. "a*b*c"  ->  "a", Italics{"b"}, "c"
 func applyRegexInText(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
-		// (?U) is the "Ungreedy" RegEx-modifier
-		r, err := regexp.Compile(`(?U)` + regex)
+		r, err := regexp.Compile(ungreedy + regex)
 		if err != nil || !r.MatchString(input) {
 			return false, nil
 		}
@@ -60,16 +55,7 @@ func applyRegexInText(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 		raws := r.Split(input, -1)
 
 		// Compile matches into nodes
-		var matchNodes []Parse.ParseTree
-		for _, match := range matches {
-			matchStr := match[1] // match = (string, capture-group)
-			matchNodes = append(matchNodes, Parse.ParseTree{
-				TagName:  tagName,
-				Children: Parse.RawChild(matchStr),
-			})
-		}
-
-		fmt.Println("->", matches)
+		matchNodes := matchesToNodes(tagName, matches, "")
 
 		// Compile non-matches into RAW-nodes
 		var rawNodes []Parse.ParseTree
@@ -90,6 +76,21 @@ func applyRegexInText(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 
 		return true, tree
 	}
+}
+
+func matchesToNodes(tagName Parse.Tag, matches [][]string, content string) []Parse.ParseTree {
+	// Compile matches into nodes
+	var matchNodes []Parse.ParseTree
+	for _, match := range matches {
+		matchStr := match[1] // match = (string, capture-group)
+		matchNodes = append(matchNodes, Parse.ParseTree{
+			TagName:  tagName,
+			Children: Parse.RawChild(matchStr),
+			Content: content,
+		})
+	}
+
+	return matchNodes
 }
 
 // Interlace two parseTrees: [x, y, x, y, …]

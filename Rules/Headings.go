@@ -15,8 +15,8 @@ var (
 		&Heading6,
 	}}
 
-	Heading1 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H1Tag, "^# (.*)$")}
-	Heading2 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H2Tag, "^## (.*)$")}
+	Heading1 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H1Tag, "^# (.*)")}
+	Heading2 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H2Tag, `^## (.*)$`)}
 	Heading3 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H3Tag, "^### (.*)$")}
 	Heading4 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H4Tag, "^#### (.*)$")}
 	Heading5 = RuleParser.Rule{ApplyFunc: extractRegex(Parse.H5Tag, "^##### (.*)$")}

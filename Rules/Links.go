@@ -22,7 +22,7 @@ var (
 func linkApply(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
 		// (?U) is the "Ungreedy" RegEx-modifier
-		r, err := regexp.Compile(`(?U)` + regex) // Match all links
+		r, err := regexp.Compile(ungreedy + regex) // Match all links
 		if err != nil || !r.MatchString(input) {
 			return false, nil
 		}

@@ -7,6 +7,7 @@ import (
 	"mdParser/PostParser"
 	"mdParser/Rules"
 	"reflect"
+	"strings"
 )
 
 func main() {
@@ -18,32 +19,33 @@ func main() {
 
 	//fmt.Printf("%v\n", Rules.Heading1.Apply)
 
-	input := "# [*aa **#*]( hello**)"
-	//input := "*a* *x*"
+	inputStr := "# [*aa **#*]( hello**)\n# **hi**"
 
-	// TODO: split by...
-	//  - "\n\n"
-	//  -
+	// Split by "\n\n"
+	sections := strings.Split(inputStr, "\n\n")
+
+	// Convert to input tree
+	var inputTree []Parse.ParseTree
+	for _, sectionStr := range sections {
+		inputTree = append(inputTree, Parse.Section(sectionStr))
+	}
 
 	// parse lines
-	_, parsed := Rules.All.Apply(input)
+	parsed := RuleParser.RecursiveApply(inputTree, &Rules.All)
+
 	var previousParsed []Parse.ParseTree
 
 	for !reflect.DeepEqual(parsed, previousParsed) {
-		fmt.Println(parsed)
-
 		// previousParsed = copy(parsed)
 		previousParsed = make([]Parse.ParseTree, len(parsed))
 		copy(previousParsed, parsed)
 
 		// parse again (only using formatters, as lines will already have been parsed)
 		parsed = RuleParser.RecursiveApply(parsed, &Rules.Formatters)
+
+		// Clean after every parse, to reduce tree size and improve performance
+		parsed = PostParser.Clean(parsed)
 	}
-
-	parsed = PostParser.Clean(parsed)
-
-	// TODO (??): implement post-processor
-	//  - to join codeblocks that have been split by intermediate "\n\n"
 
 	// TODO: implement compiler to HTML
 

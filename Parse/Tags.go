@@ -6,6 +6,8 @@ const (
 	RawTag  Tag = "RAW"
 	TextTag Tag = "TEXT"
 
+	SectionTag Tag = "section"
+
 	H1Tag Tag = "h1"
 	H2Tag Tag = "h2"
 	H3Tag Tag = "h3"
