@@ -2,12 +2,16 @@
 package Rules
 
 import (
+	"fmt"
 	"mdParser/Parse"
+	"mdParser/Parse/RuleParser"
 	"regexp"
+	"strings"
 )
 
+
 // E.g. "# abc"  ->  "abc"
-func extractRegex(tagName Parse.Tag, regex string) applyFunc {
+func extractRegex(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
 		r, err := regexp.Compile(regex)
 		if err != nil || !r.MatchString(input) {
@@ -25,7 +29,7 @@ func extractRegex(tagName Parse.Tag, regex string) applyFunc {
 }
 
 // E.g. "- [ ] abc"  ->  Checkbox{ "abc", false }
-func extractRegexWContent(tagName Parse.Tag, regex string, content string) applyFunc {
+func extractRegexWContent(tagName Parse.Tag, regex string, content string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
 		r, err := regexp.Compile(regex)
 		if err != nil || !r.MatchString(input) {
@@ -44,7 +48,7 @@ func extractRegexWContent(tagName Parse.Tag, regex string, content string) apply
 }
 
 // E.g. "a*b*c"  ->  "a", Italics{"b"}, "c"
-func applyRegexInText(tagName Parse.Tag, regex string) applyFunc {
+func applyRegexInText(tagName Parse.Tag, regex string) RuleParser.ApplyFunc {
 	return func(input string) (bool, []Parse.ParseTree) {
 		// (?U) is the "Ungreedy" RegEx-modifier
 		r, err := regexp.Compile(`(?U)` + regex)
@@ -52,29 +56,60 @@ func applyRegexInText(tagName Parse.Tag, regex string) applyFunc {
 			return false, nil
 		}
 
-		matches := r.FindStringSubmatch(input)[1:]
-
-		// tagsNo := len(matches)*2+1
-		tags := make([]Parse.ParseTree, 0)
-
-		// Interlace raw strings with tags:
-		// 	RAW [match] RAW [match] RAW
+		matches := r.FindAllStringSubmatch(input, -1)
 		raws := r.Split(input, -1)
-		for i, rawStr := range raws {
-			if rawStr == "" {
-				continue
-			}
-			tags = append(tags, Parse.Raw(rawStr))
 
-			if i >= len(matches) {
-				continue
-			}
-			tags = append(tags, Parse.ParseTree{
+		// Compile matches into nodes
+		var matchNodes []Parse.ParseTree
+		for _, match := range matches {
+			matchStr := match[1] // match = (string, capture-group)
+			matchNodes = append(matchNodes, Parse.ParseTree{
 				TagName:  tagName,
-				Children: Parse.RawChild(matches[i]),
+				Children: Parse.RawChild(matchStr),
 			})
 		}
 
-		return true, tags
+		fmt.Println("->", matches)
+
+		// Compile non-matches into RAW-nodes
+		var rawNodes []Parse.ParseTree
+		for _, rawStr := range raws {
+			rawNodes = append(rawNodes, Parse.Raw(rawStr))
+		}
+
+		if len(raws) <= 0 {
+			return true, matchNodes
+		}
+
+		var tree []Parse.ParseTree
+		if strings.HasPrefix(input, raws[0]) {
+			tree = interlace(rawNodes, matchNodes)
+		} else {
+			tree = interlace(matchNodes, rawNodes)
+		}
+
+		return true, tree
+	}
+}
+
+// Interlace two parseTrees: [x, y, x, y, …]
+func interlace(xs, ys []Parse.ParseTree) []Parse.ParseTree {
+	var out []Parse.ParseTree
+	var x, y Parse.ParseTree
+	for {
+		if len(xs)+len(ys) <= 0 {
+			return out
+		}
+
+		if len(xs) > 0 {
+			// out.append( xs.pop() )
+			x, xs = xs[0], xs[1:]
+			out = append(out, x)
+		}
+		if len(ys) > 0 {
+			// out.append( ys.pop() )
+			y, ys = ys[0], ys[1:]
+			out = append(out, y)
+		}
 	}
 }

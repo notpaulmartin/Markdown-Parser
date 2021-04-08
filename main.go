@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"mdParser/Parse"
+	"mdParser/Parse/RuleParser"
+	"mdParser/PostParser"
 	"mdParser/Rules"
 	"reflect"
 )
@@ -14,7 +16,10 @@ func main() {
 	//
 	//fmt.Println(text)
 
-	input := "[aa **#]( hello**)"
+	//fmt.Printf("%v\n", Rules.Heading1.Apply)
+
+	input := "# [*aa **#*]( hello**)"
+	//input := "*a* *x*"
 
 	// TODO: split by...
 	//  - "\n\n"
@@ -25,18 +30,22 @@ func main() {
 	var previousParsed []Parse.ParseTree
 
 	for !reflect.DeepEqual(parsed, previousParsed) {
+		fmt.Println(parsed)
+
 		// previousParsed = copy(parsed)
 		previousParsed = make([]Parse.ParseTree, len(parsed))
 		copy(previousParsed, parsed)
 
 		// parse again (only using formatters, as lines will already have been parsed)
-		parsed = Rules.RecursiveApply(parsed, &Rules.Formatters)
+		parsed = RuleParser.RecursiveApply(parsed, &Rules.Formatters)
 	}
+
+	parsed = PostParser.Clean(parsed)
 
 	// TODO (??): implement post-processor
 	//  - to join codeblocks that have been split by intermediate "\n\n"
 
 	// TODO: implement compiler to HTML
 
-	fmt.Println(parsed)
+	fmt.Printf("%v\n", parsed)
 }

@@ -1,6 +1,9 @@
 package Rules
 
-import "mdParser/Parse/RuleParser"
+import (
+	"mdParser/Parse"
+	"mdParser/Parse/RuleParser"
+)
 
 /* TODO:
  *  - Multi-line rules
@@ -17,6 +20,12 @@ var All = RuleParser.Precedence{Order: []Parse.Applyable{
 var Extractors = RuleParser.Precedence{Order: []Parse.Applyable{
 	&Headings,
 	&Lists,
+}}
+
+var Formatters = RuleParser.Precedence{Order: []Parse.Applyable{
+	&Links,
+	&TextFormatting,
+	&Text,
 }}
 
 /// Text - If everything else fails

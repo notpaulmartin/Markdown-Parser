@@ -16,7 +16,7 @@ const (
 	BoldTag          Tag = "strong"
 	ItalicsTag       Tag = "em"
 	LinkTag			 Tag = "a"
-	PicTag			 Tag = "PIC" // TODO: use html tag
+	ImgTag			 Tag = "img" // TODO: use html tag
 	StrikethroughTag Tag = "strike"
 
 	CheckboxTrueTag  Tag = "checkboxTrue"  // Checked

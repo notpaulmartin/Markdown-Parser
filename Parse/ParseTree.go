@@ -6,6 +6,8 @@ type ParseTree struct {
 	Content  string
 }
 
+var EmptyTree []ParseTree
+
 // Not to mistake with a leaf node, a unit tree has only one node at its root
 func UnitTree(node ParseTree) []ParseTree {
 	return []ParseTree{node}

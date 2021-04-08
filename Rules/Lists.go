@@ -13,9 +13,21 @@ var (
 		&OrderedListItem,
 	}}
 
-	CheckboxChecked = RuleParser.Rule{ApplyFunc: extractRegex(Parse.CheckboxTrueTag, `- \[[x|X]\] (.*)`)}
-	CheckboxUnchecked = RuleParser.Rule{ApplyFunc: extractRegex(Parse.CheckboxFalseTag, `- \[ ?\] (.*)`)}
+	CheckboxChecked = RuleParser.Rule{
+		TagName: Parse.CheckboxTrueTag,
+		ApplyFunc: extractRegex(Parse.CheckboxTrueTag, `- \[[x|X]\] (.*)`),
+	}
+	CheckboxUnchecked = RuleParser.Rule{
+		TagName: Parse.CheckboxFalseTag,
+		ApplyFunc: extractRegex(Parse.CheckboxFalseTag, `- \[ ?\] (.*)`),
+	}
 
-	UnorderedListItem = RuleParser.Rule{ApplyFunc: extractRegex(Parse.UnorderedListTag, `- (.*)`)}
-	OrderedListItem   = RuleParser.Rule{ApplyFunc: extractRegex(Parse.OrderedListTag, `\d+\. (.*)`)}
+	UnorderedListItem = RuleParser.Rule{
+		TagName: Parse.UnorderedListTag,
+		ApplyFunc: extractRegex(Parse.UnorderedListTag, `- (.*)`),
+	}
+	OrderedListItem   = RuleParser.Rule{
+		TagName: Parse.OrderedListTag,
+		ApplyFunc: extractRegex(Parse.OrderedListTag, `\d+\. (.*)`),
+	}
 )

@@ -2,10 +2,11 @@ package RuleParser
 
 import "mdParser/Parse"
 
-type applyFunc func(string) (bool, []Parse.ParseTree)
+type ApplyFunc func(string) (bool, []Parse.ParseTree)
 
 type Rule struct {
-	ApplyFunc applyFunc
+	TagName   Parse.Tag
+	ApplyFunc ApplyFunc
 }
 
 // Wrapper around ApplyFunc, to allow for interface matching
