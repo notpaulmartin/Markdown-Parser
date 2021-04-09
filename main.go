@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"mdParser/Compiler"
 	"mdParser/Parse"
 	"mdParser/Parse/RuleParser"
 	"mdParser/PostParser"
@@ -42,12 +43,11 @@ func main() {
 
 		// parse again (only using formatters, as lines will already have been parsed)
 		parsed = RuleParser.RecursiveApply(parsed, &Rules.Formatters)
-
-		// Clean after every parse, to reduce tree size and improve performance
-		parsed = PostParser.Clean(parsed)
 	}
 
-	// TODO: implement compiler to HTML
+	parsed = PostParser.Clean(parsed)
+	html := Compiler.ToHtml(parsed)
 
-	fmt.Printf("%v\n", parsed)
+	fmt.Println(parsed)
+	fmt.Println(html)
 }
