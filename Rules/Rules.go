@@ -23,6 +23,7 @@ var Extractors = RuleParser.Precedence{Order: []Parse.Applyable{
 }}
 
 var Formatters = RuleParser.Precedence{Order: []Parse.Applyable{
+	&EscapeCharacters,
 	&Links,
 	&TextFormatting,
 	&Text,

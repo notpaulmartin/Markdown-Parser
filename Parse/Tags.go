@@ -6,6 +6,8 @@ const (
 	RawTag  Tag = "RAW"
 	TextTag Tag = "TEXT"
 
+	EscapeTag Tag = "ESCAPE"
+
 	SectionTag Tag = "section"
 
 	H1Tag Tag = "h1"
@@ -17,12 +19,13 @@ const (
 
 	BoldTag          Tag = "strong"
 	ItalicsTag       Tag = "em"
-	LinkTag			 Tag = "a"
-	ImgTag			 Tag = "img" // TODO: use html tag
+	LinkTag          Tag = "a"
+	ImgTag           Tag = "img"
 	StrikethroughTag Tag = "strike"
 
 	CheckboxTrueTag  Tag = "checkboxTrue"  // Checked
 	CheckboxFalseTag Tag = "checkboxFalse" // Unchecked
-	OrderedListTag   Tag = "orderedList"
-	UnorderedListTag Tag = "unorderedList"
+	OrderedListTag   Tag = "ol"
+	UnorderedListTag Tag = "ul"
+	ListItemTag      Tag = "li"
 )
