@@ -8,6 +8,7 @@ import (
 // TODO:
 //  - Join adjacent texts into one
 
+// main
 func Clean(tree []Parse.ParseTree) []Parse.ParseTree {
 	var prevTree []Parse.ParseTree
 

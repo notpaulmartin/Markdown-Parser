@@ -103,6 +103,11 @@ func parseBlock(blockStr string, blockType Parse.Tag) []Parse.ParseTree {
 	})
 
 	for _, line := range itemLines {
+		// Skip empty lines
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
 		ok, newListType, newIndentLen, listItem := parseListItem(line)
 		if !ok {
 			// Should never happen

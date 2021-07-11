@@ -2,6 +2,7 @@ package PostParser
 
 import (
 	"mdParser/Parse"
+	"strings"
 )
 
 func removeEmptyLeaves(tree []Parse.ParseTree) []Parse.ParseTree {
@@ -13,7 +14,7 @@ func removeEmptyLeaves(tree []Parse.ParseTree) []Parse.ParseTree {
 	// Remove case: unit tree and reached empty text node
 	if len(tree) == 1 &&
 		len(tree[0].Children) <= 0 &&
-		tree[0].Content == "" {
+		strings.TrimSpace(tree[0].Content) == "" {
 		return Parse.EmptyTree
 	}
 

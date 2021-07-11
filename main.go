@@ -12,7 +12,6 @@ import (
 	"mdParser/Rules"
 	"os"
 	"reflect"
-	"strings"
 )
 
 func main() {
@@ -28,24 +27,36 @@ func main() {
 	inputStr := string(inputBytes)
 
 	// Split Markdown string by "\n\n"
-	sections := strings.Split(inputStr, "\n\n")
+	//sections := strings.Split(inputStr, "\n\n")
 
 	// Convert sections to input tree
 	var inputTree []Parse.ParseTree
-	for _, sectionStr := range sections {
-		inputTree = append(inputTree, Parse.Section(sectionStr))
-	}
+	//for _, sectionStr := range sections {
+	//	inputTree = append(inputTree, Parse.Section(sectionStr))
+	//}
 
-	// parse lines
-	parsed := RuleParser.RecursiveApply(inputTree, &Rules.All)
-
-	// Parse formatting until can't parse anymore
-	var previousParsed []Parse.ParseTree
+	inputTree = append(inputTree, Parse.Section(inputStr))
+	
+	// First only parse entire lines (until can't parse anymore)
+	var parsed, previousParsed []Parse.ParseTree
+	parsed = inputTree
 	for !reflect.DeepEqual(parsed, previousParsed) {
 		// previousParsed = copy(parsed)
 		previousParsed = make([]Parse.ParseTree, len(parsed))
 		copy(previousParsed, parsed)
 
+		//parsed = PostParser.Trim(parsed)
+		// parse again (only using formatters, as lines will already have been parsed)
+		parsed = RuleParser.RecursiveApply(parsed, &Rules.Extractors)
+	}
+
+	// Then parse only inline formatting (until can't parse anymore)
+	for !reflect.DeepEqual(parsed, previousParsed) {
+		// previousParsed = copy(parsed)
+		previousParsed = make([]Parse.ParseTree, len(parsed))
+		copy(previousParsed, parsed)
+
+		// parsed = PostParser.Trim(parsed)
 		// parse again (only using formatters, as lines will already have been parsed)
 		parsed = RuleParser.RecursiveApply(parsed, &Rules.Formatters)
 	}

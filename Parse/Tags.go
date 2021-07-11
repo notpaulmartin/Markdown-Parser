@@ -8,6 +8,8 @@ const (
 
 	EscapeTag Tag = "ESCAPE"
 
+	HtmlTagTag Tag = "HTML_TAG"
+
 	SectionTag Tag = "section"
 
 	H1Tag Tag = "h1"
