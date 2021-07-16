@@ -19,6 +19,8 @@ const (
 	H5Tag Tag = "h5"
 	H6Tag Tag = "h6"
 
+	ParagraphTag Tag = "p"
+
 	BoldTag          Tag = "strong"
 	ItalicsTag       Tag = "em"
 	LinkTag          Tag = "a"

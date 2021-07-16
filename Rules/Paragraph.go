@@ -1,6 +1,7 @@
 package Rules
 
 import (
+	"fmt"
 	"mdParser/Parse"
 	"mdParser/Parse/RuleParser"
 	"regexp"
@@ -8,15 +9,16 @@ import (
 )
 
 var (
-	HtmlTag = RuleParser.Rule{
-		TagName:   Parse.HtmlTagTag,
-		ApplyFunc: applyHtmlTag,
+	Paragraph = RuleParser.Rule{
+		TagName:   Parse.ParagraphTag,
+		ApplyFunc: applyParagraph,
 	}
 )
 
-func applyHtmlTag(input string) (bool, []Parse.ParseTree) {
-	// TODO
-	regexStr := `<(.*)>(.*)</.*>`
+func applyParagraph(input string) (bool, []Parse.ParseTree) {
+	// Executed after every other line("extractor")-rule, so matches any line that hasn't been matched otherwise
+	// Splits paragraphs by empty line after (\n\n) and captures the last paragraph without needing "\n\n" after it
+	regexStr := `^(.+)\n\n|^(.+)\z` // "\z" = Absolute end of string
 
 	r, err := regexp.Compile(singleline + ungreedy + regexStr)
 	if err != nil || !r.MatchString(input) {
@@ -27,13 +29,12 @@ func applyHtmlTag(input string) (bool, []Parse.ParseTree) {
 	matches := r.FindAllStringSubmatch(input, -1)
 	var matchNodes []Parse.ParseTree
 	for _, match := range matches {
+		fmt.Println("->", match[1])
 		// match = (string, capture-groups...)
-		htmlTagName := match[1]
-		htmlTagContent := match[2]
+		paragraphText := selectNonEmpty(match[1:])
 		matchNodes = append(matchNodes, Parse.ParseTree{
-			TagName:  Parse.HtmlTagTag,
-			Children: Parse.RawChild(htmlTagContent),
-			Content: htmlTagName,
+			TagName:  Parse.ParagraphTag,
+			Children: Parse.RawChild(paragraphText),
 		})
 	}
 
@@ -56,4 +57,5 @@ func applyHtmlTag(input string) (bool, []Parse.ParseTree) {
 	}
 
 	return true, tree
+	//return false, nil
 }

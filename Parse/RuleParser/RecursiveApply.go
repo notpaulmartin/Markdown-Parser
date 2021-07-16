@@ -14,8 +14,8 @@ func RecursiveApply(tree []Parse.ParseTree, applyable Parse.Applyable) []Parse.P
 	if len(tree) == 1 && tree[0].TagName == Parse.RawTag {
 		success, parse := applyable.Apply(tree[0].Content) // Try to expand node
 		if !success {
-			// If can't expand, convert to Text leaf node
-			return Parse.UnitTree(Parse.Text(tree[0].Content))
+			// If can't expand, leave as is
+			return tree
 		}
 		return parse
 	}
@@ -32,6 +32,7 @@ func RecursiveApply(tree []Parse.ParseTree, applyable Parse.Applyable) []Parse.P
 	}
 
 	// Not a unit tree  ->  Recurse over all root nodes
+	// TODO: do in parallel using a worker pool
 	var newTree []Parse.ParseTree
 	for _, node := range tree {
 		newTree = append(newTree, RecursiveApply(Parse.UnitTree(node), applyable)...)

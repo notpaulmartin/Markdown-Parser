@@ -35,8 +35,8 @@ func main() {
 	//	inputTree = append(inputTree, Parse.Section(sectionStr))
 	//}
 
-	inputTree = append(inputTree, Parse.Section(inputStr))
-	
+	inputTree = append(inputTree, Parse.Raw(inputStr))
+
 	// First only parse entire lines (until can't parse anymore)
 	var parsed, previousParsed []Parse.ParseTree
 	parsed = inputTree
@@ -50,7 +50,10 @@ func main() {
 		parsed = RuleParser.RecursiveApply(parsed, &Rules.Extractors)
 	}
 
+	parsed = AddParagraphs(parsed)
+
 	// Then parse only inline formatting (until can't parse anymore)
+	previousParsed = nil
 	for !reflect.DeepEqual(parsed, previousParsed) {
 		// previousParsed = copy(parsed)
 		previousParsed = make([]Parse.ParseTree, len(parsed))

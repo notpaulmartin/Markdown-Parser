@@ -45,6 +45,10 @@ func toHtml(tree []Parse.ParseTree, strBuilder *strings.Builder) *strings.Builde
 
 func openingHtmlTag(node Parse.ParseTree) string {
 	switch node.TagName {
+	case Parse.TextTag:
+		return ""
+	case Parse.HtmlTagTag:
+		return fmt.Sprintf("<%s>", node.Content)
 	case Parse.LinkTag:
 		return fmt.Sprintf("<a href=\"%s\">", node.Content)
 	case Parse.ImgTag:
@@ -58,6 +62,16 @@ func openingHtmlTag(node Parse.ParseTree) string {
 
 func closingHtmlTag(node Parse.ParseTree) string {
 	switch node.TagName {
+	case Parse.TextTag:
+		return ""
+	case Parse.HtmlTagTag:
+		// Only keep html tag name before space (to remove e.g. class="")
+		pos := strings.Index(node.Content, " ")
+		if pos == -1 {
+			return fmt.Sprintf("</%s>", node.Content)
+		}
+		return fmt.Sprintf("</%s>", node.Content[0:pos])
+
 	default:
 		return fmt.Sprintf("</%s>", node.TagName)
 	}

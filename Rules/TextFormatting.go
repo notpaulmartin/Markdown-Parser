@@ -19,7 +19,7 @@ var (
 	}
 	Italics = RuleParser.Rule{
 		TagName: Parse.ItalicsTag,
-		ApplyFunc: applyRegexInText(Parse.ItalicsTag, `\*(.*)\*`),
+		ApplyFunc: applyRegexInText(Parse.ItalicsTag, `\*(.*)\*|_(.*)_`),
 	}
 	// /*?*/ BoldItalics = Rule{applyRegexInText(Parse.ItalicsTag, `\*\*\*(.*)\*\*\*`)}
 )

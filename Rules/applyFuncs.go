@@ -12,6 +12,7 @@ import (
 const (
 	ungreedy  = `(?Um)`
 	multiline = `(?m)`
+	singleline = `(?s)`
 )
 
 
@@ -74,7 +75,8 @@ func matchesToNodes(tagName Parse.Tag, matches [][]string, content string) []Par
 	// Compile matches into nodes
 	var matchNodes []Parse.ParseTree
 	for _, match := range matches {
-		matchStr := match[1] // match = (string, capture-group)
+		// Select first non-empty capture group, as regex or-statements (a)|(b) may result in multiple groups
+		matchStr := selectNonEmpty(match[1:]) // match = (string, capture-groups)
 		matchNodes = append(matchNodes, Parse.ParseTree{
 			TagName:  tagName,
 			Children: Parse.RawChild(matchStr),
@@ -105,4 +107,15 @@ func interlace(xs, ys []Parse.ParseTree) []Parse.ParseTree {
 			out = append(out, y)
 		}
 	}
+}
+
+// Select the first non-empty string from a list
+func selectNonEmpty(strs []string) string {
+	for _, str := range strs {
+		if str != "" {
+			return str
+		}
+	}
+
+	return ""
 }

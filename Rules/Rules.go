@@ -18,8 +18,10 @@ var All = RuleParser.Precedence{Order: []Parse.Applyable{
 }}
 
 var Extractors = RuleParser.Precedence{Order: []Parse.Applyable{
+	&HtmlTag,
 	&Headings,
 	&Lists,
+	//&Paragraph,
 }}
 
 var Formatters = RuleParser.Precedence{Order: []Parse.Applyable{
