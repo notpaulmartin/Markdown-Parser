@@ -1,4 +1,4 @@
-package main
+package mdParser
 
 import (
 	"github.com/notpaulmartin/mdParser/Parse"
