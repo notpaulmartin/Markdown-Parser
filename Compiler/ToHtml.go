@@ -57,7 +57,7 @@ func openingHtmlTag(node Parse.ParseTree) string {
 		return fmt.Sprintf("<%s>", node.TagName)
 	}
 
-	// TODO: Checkbox, List
+	// TODO: Checkbox
 }
 
 func closingHtmlTag(node Parse.ParseTree) string {
@@ -76,5 +76,5 @@ func closingHtmlTag(node Parse.ParseTree) string {
 		return fmt.Sprintf("</%s>", node.TagName)
 	}
 
-	// TODO: Checkbox, List
+	// TODO: Checkbox
 }

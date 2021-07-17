@@ -1,7 +1,6 @@
 package Rules
 
 import (
-	"fmt"
 	"mdParser/Parse"
 	"mdParser/Parse/RuleParser"
 	"regexp"
@@ -29,9 +28,7 @@ func applyParagraph(input string) (bool, []Parse.ParseTree) {
 	matches := r.FindAllStringSubmatch(input, -1)
 	var matchNodes []Parse.ParseTree
 	for _, match := range matches {
-		fmt.Println("->", match[1])
-		// match = (string, capture-groups...)
-		paragraphText := selectNonEmpty(match[1:])
+		paragraphText := selectNonEmpty(match[1:])  // match = (string, capture-groups...)
 		matchNodes = append(matchNodes, Parse.ParseTree{
 			TagName:  Parse.ParagraphTag,
 			Children: Parse.RawChild(paragraphText),

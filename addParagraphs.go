@@ -1,4 +1,4 @@
-package main
+package mdParser
 
 import (
 	"mdParser/Parse"
@@ -8,7 +8,7 @@ import (
 
 // Similar to RuleParser.RecursiveApply, going through tree, but only converting
 // uninterpreted RAW nodes at the root (or in html tags) to paragraphs
-func AddParagraphs(tree []Parse.ParseTree) []Parse.ParseTree {
+func addParagraphs(tree []Parse.ParseTree) []Parse.ParseTree {
 	// Base case: empty tree
 	if len(tree) == 0 {
 		return tree
@@ -26,7 +26,7 @@ func AddParagraphs(tree []Parse.ParseTree) []Parse.ParseTree {
 
 	// Unit tree and at expandable node  ->  Go deeper
 	if len(tree) == 1 && tree[0].TagName == Parse.HtmlTagTag {
-		tree[0].Children = AddParagraphs(tree[0].Children)
+		tree[0].Children = addParagraphs(tree[0].Children)
 		return tree
 	}
 
@@ -38,7 +38,7 @@ func AddParagraphs(tree []Parse.ParseTree) []Parse.ParseTree {
 	// Not a unit tree  ->  Recurse over all root nodes
 	var newTree []Parse.ParseTree
 	for _, node := range tree {
-		newTree = append(newTree, AddParagraphs(Parse.UnitTree(node))...)
+		newTree = append(newTree, addParagraphs(Parse.UnitTree(node))...)
 	}
 	return newTree
 }
