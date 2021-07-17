@@ -1,9 +1,9 @@
 package Rules
 
 import (
+	"github.com/notpaulmartin/mdParser/Parse"
+	"github.com/notpaulmartin/mdParser/Parse/RuleParser"
 	"log"
-	"mdParser/Parse"
-	"mdParser/Parse/RuleParser"
 	"reflect"
 	"regexp"
 	"strings"

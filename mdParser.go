@@ -1,11 +1,11 @@
-package mdParser
+package main
 
 import (
-	"mdParser/Compiler"
-	"mdParser/Parse"
-	"mdParser/Parse/RuleParser"
-	"mdParser/PostParser"
-	"mdParser/Rules"
+	"github.com/notpaulmartin/mdParser/Compiler"
+	"github.com/notpaulmartin/mdParser/Parse"
+	"github.com/notpaulmartin/mdParser/Parse/RuleParser"
+	"github.com/notpaulmartin/mdParser/PostParser"
+	"github.com/notpaulmartin/mdParser/Rules"
 	"reflect"
 )
 

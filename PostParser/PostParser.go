@@ -1,7 +1,7 @@
 package PostParser
 
 import (
-	"mdParser/Parse"
+	"github.com/notpaulmartin/mdParser/Parse"
 	"reflect"
 )
 

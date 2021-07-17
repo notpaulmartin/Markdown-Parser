@@ -1,8 +1,6 @@
 package PostParser
 
-import (
-	"mdParser/Parse"
-)
+import "github.com/notpaulmartin/mdParser/Parse"
 
 func joinLists(tree []Parse.ParseTree) []Parse.ParseTree {
 	// Base case: empty tree

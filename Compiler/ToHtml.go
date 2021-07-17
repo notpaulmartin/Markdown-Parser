@@ -2,7 +2,7 @@ package Compiler
 
 import (
 	"fmt"
-	"mdParser/Parse"
+	"github.com/notpaulmartin/mdParser/Parse"
 	"strings"
 )
 

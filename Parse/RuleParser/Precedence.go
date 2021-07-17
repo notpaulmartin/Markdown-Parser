@@ -1,8 +1,6 @@
 package RuleParser
 
-import (
-	"mdParser/Parse"
-)
+import "github.com/notpaulmartin/mdParser/Parse"
 
 // Defines an Order (precedence) in which rules and precedences should be applied
 type Precedence struct {

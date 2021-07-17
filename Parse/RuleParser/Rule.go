@@ -1,6 +1,6 @@
 package RuleParser
 
-import "mdParser/Parse"
+import "github.com/notpaulmartin/mdParser/Parse"
 
 type ApplyFunc func(string) (bool, []Parse.ParseTree)
 

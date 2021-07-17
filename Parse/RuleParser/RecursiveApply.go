@@ -1,8 +1,6 @@
 package RuleParser
 
-import (
-	"mdParser/Parse"
-)
+import "github.com/notpaulmartin/mdParser/Parse"
 
 func RecursiveApply(tree []Parse.ParseTree, applyable Parse.Applyable) []Parse.ParseTree {
 	// Base case: empty tree

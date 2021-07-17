@@ -1,8 +1,8 @@
 package Rules
 
 import (
-	"mdParser/Parse"
-	"mdParser/Parse/RuleParser"
+	"github.com/notpaulmartin/mdParser/Parse"
+	"github.com/notpaulmartin/mdParser/Parse/RuleParser"
 )
 
 // Text formatting (bold, italics, etc.)

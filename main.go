@@ -1,4 +1,4 @@
-package mdParser
+package main
 
 import (
 	"fmt"
